@@ -6,10 +6,12 @@ import tech.getarrays.employeemanager.exception.UserNotFoundException;
 import tech.getarrays.employeemanager.model.Employee;
 import tech.getarrays.employeemanager.repository.EmployeeRepo;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class EmployeeService {
     private final EmployeeRepo employeeRepo;
 
@@ -27,12 +29,13 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
-    public Employee updateEmployee(Employee employee){
+    public Employee updateEmployee(Employee employee) {
         return employeeRepo.save(employee);
     }
 
-    public Employee findEmployeeById(Long id) throws Throwable {
-        return employeeRepo.findEmployeeById(id).orElseThrow(() -> new UserNotFoundException("User by id :" + id + " not found !"));
+    public Employee findEmployeeById(Long id) {
+        return employeeRepo.findEmployeeById(id)
+                .orElseThrow(() -> new UserNotFoundException("User by id " + id + " was not found"));
     }
 
     public void deleteEmployee(Long id){
